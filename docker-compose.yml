@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sea-challenge-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sea
+      POSTGRES_PASSWORD: sea
+      POSTGRES_DB: sea_challenge
+    ports:
+      - "5432:5432"
+    volumes:
+      - sea_pgdata:/var/lib/postgresql/data
+      - ./apps/api/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sea -d sea_challenge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  sea_pgdata:
