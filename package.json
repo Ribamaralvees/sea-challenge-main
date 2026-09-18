@@ -1,0 +1,21 @@
+{
+  "name": "sea-challenge",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev -w @sea/api\" \"npm run dev -w @sea/web\"",
+    "dev:web": "npm run dev -w @sea/web",
+    "dev:api": "npm run dev -w @sea/api",
+    "build": "npm run build -w @sea/api && npm run build -w @sea/web",
+    "start:api": "npm run start -w @sea/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
