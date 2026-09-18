@@ -1,0 +1,22 @@
+# dependências
+node_modules
+
+# builds
+dist
+dist-ssr
+
+# ambiente
+.env
+*.local
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.DS_Store
+
+# logs
+*.log
+
+COMMITS.md
+PROMPT-COMMITS.md
