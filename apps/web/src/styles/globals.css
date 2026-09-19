@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: 100 159 191;
+  --color-primary-light: 129 177 203;
+  --color-primary-dark: 78 138 171;
+  --color-sidebar: 79 161 193;
+
+  --color-surface: 255 255 255;
+  --color-surface-blue: 224 236 242;
+  --color-step-active-bg: 197 219 231;
+  --color-background: 242 242 242;
+
+  --color-step-inactive: 219 219 219;
+  --color-step-inactive-icon: 179 179 179;
+  --color-outline: 39 47 51;
+  --color-decorative: 214 225 232;
+
+  --color-text-heading: 92 92 92;
+  --color-text-primary: 112 112 112;
+  --color-text-secondary: 110 110 110;
+  --color-text-muted: 149 149 149;
+  --color-text-inverse: 255 255 255;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-text-primary));
+    font-family: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .stepper-connector {
+    flex: 1 1 auto;
+    height: 0;
+    border-top: 3px dashed rgb(var(--color-primary));
+    opacity: 0.55;
+  }
+
+  .select-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23649fbf' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+  }
+
+  .scroll-soft::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scroll-soft::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--color-surface-blue));
+    border-radius: 9999px;
+  }
+}
