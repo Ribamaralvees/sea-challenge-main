@@ -1,29 +1,29 @@
 import { z } from 'zod'
-import { CPF_PATTERN } from '@/utils/cpf'
+import { CPF_PATTERN, genderSchema } from '@sea/shared'
 
-const epiSchema = z.object({
-  name: z.string().min(1, 'Selecione o EPI'),
-  ca: z.string(),
-})
-
-const epiActivitySchema = z.object({
+// Schema de EPI do FORMULÁRIO: `ca` fica sem `min(1)` de propósito — a mensagem por
+// linha vem do superRefine abaixo, que aponta o path exato do campo na UI.
+const formEpiActivitySchema = z.object({
   activity: z.string().min(1, 'Selecione a atividade'),
-  epis: z.array(epiSchema),
+  epis: z.array(
+    z.object({
+      name: z.string().min(1, 'Selecione o EPI'),
+      ca: z.string(),
+    }),
+  ),
 })
 
 export const employeeSchema = z
   .object({
     active: z.boolean(),
     name: z.string().min(3, 'Informe o nome completo (mín. 3 caracteres)'),
-    gender: z.enum(['masculino', 'feminino'], {
-      errorMap: () => ({ message: 'Selecione o sexo' }),
-    }),
+    gender: genderSchema,
     cpf: z.string().regex(CPF_PATTERN, 'CPF inválido (000.000.000-00)'),
     birthDate: z.string().min(1, 'Informe a data de nascimento'),
     rg: z.string().min(1, 'Informe o RG'),
     role: z.string().min(1, 'Selecione o cargo'),
     noEpi: z.boolean(),
-    epiActivities: z.array(epiActivitySchema),
+    epiActivities: z.array(formEpiActivitySchema),
     healthCertificate: z.string().nullable(),
   })
   .superRefine((data, ctx) => {

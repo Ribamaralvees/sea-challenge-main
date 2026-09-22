@@ -7,5 +7,3 @@ export function maskCpf(value: string): string {
     .replace(/(\d{3})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
 }
-
-export const CPF_PATTERN = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/
