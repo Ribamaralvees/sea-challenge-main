@@ -24,6 +24,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -p apps/api/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.app.json --noEmit",
+    "test": "npm run test -w @sea/web && npm run test -w @sea/api",
+    "test:coverage": "npm run test:coverage -w @sea/web && npm run test:coverage -w @sea/api",
     "prepare": "husky"
   },
   "lint-staged": {
