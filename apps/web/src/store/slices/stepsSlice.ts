@@ -38,7 +38,6 @@ const stepsSlice = createSlice({
   name: 'steps',
   initialState,
   reducers: {
-    
     setCurrentIndex: (state, action: PayloadAction<number>) => {
       state.currentIndex = action.payload
     },

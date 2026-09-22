@@ -30,15 +30,15 @@ npm run dev
 
 Scripts úteis na raiz:
 
-| Script | O que faz |
-|---|---|
-| `npm run db:up` | Sobe o PostgreSQL em container (Docker) |
-| `npm run db:down` | Para o container do banco |
+| Script             | O que faz                                                     |
+| ------------------ | ------------------------------------------------------------- |
+| `npm run db:up`    | Sobe o PostgreSQL em container (Docker)                       |
+| `npm run db:down`  | Para o container do banco                                     |
 | `npm run db:reset` | Recria o banco do zero (apaga o volume e roda o seed de novo) |
-| `npm run dev` | Sobe API e web em paralelo |
-| `npm run dev:web` | Sobe apenas o front-end |
-| `npm run dev:api` | Sobe apenas a API |
-| `npm run build` | Builda API e web |
+| `npm run dev`      | Sobe API e web em paralelo                                    |
+| `npm run dev:web`  | Sobe apenas o front-end                                       |
+| `npm run dev:api`  | Sobe apenas a API                                             |
+| `npm run build`    | Builda API e web                                              |
 
 O front consome `http://localhost:3001` por padrão (configurável via `VITE_API_URL` em `apps/web`).
 
@@ -63,14 +63,14 @@ Detalhe sobre estilo: o desafio recomendava Ant Design, mas optei por Tailwind p
 
 Node + Express + TypeScript, com **PostgreSQL** acessado via `pg` (consultas parametrizadas, pool de conexões). O banco roda em Docker (`docker-compose.yml`) e é criado/populado automaticamente a partir de `apps/api/db/init.sql` na primeira subida.
 
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/employees` | Lista os funcionários |
-| POST | `/employees` | Cria um funcionário (id gerado pelo banco) |
-| PUT | `/employees/:id` | Atualiza um funcionário |
-| DELETE | `/employees/:id` | Remove um funcionário |
-| GET | `/steps` | Lista as etapas |
-| PATCH | `/steps/:id` | Atualiza uma etapa (ex.: marcar como concluída) |
+| Método | Rota             | Descrição                                       |
+| ------ | ---------------- | ----------------------------------------------- |
+| GET    | `/employees`     | Lista os funcionários                           |
+| POST   | `/employees`     | Cria um funcionário (id gerado pelo banco)      |
+| PUT    | `/employees/:id` | Atualiza um funcionário                         |
+| DELETE | `/employees/:id` | Remove um funcionário                           |
+| GET    | `/steps`         | Lista as etapas                                 |
+| PATCH  | `/steps/:id`     | Atualiza uma etapa (ex.: marcar como concluída) |
 
 A conexão usa a variável `DATABASE_URL` (veja `apps/api/.env.example`). Detalhes em `apps/api/README.md`.
 
@@ -85,4 +85,4 @@ A conexão usa a variável `DATABASE_URL` (veja `apps/api/.env.example`). Detalh
 
 ---
 
-*Desenvolvido por José Ribamar — [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-ribamar-01a6b6371/) · [GitHub](https://github.com/Ribamaralvees/)*
+_Desenvolvido por José Ribamar — [LinkedIn](https://www.linkedin.com/in/jos%C3%A9-ribamar-01a6b6371/) · [GitHub](https://github.com/Ribamaralvees/)_

@@ -3,7 +3,7 @@ import { Sidebar } from './Sidebar'
 
 interface MainLayoutProps {
   children: ReactNode
-  
+
   decoration?: ReactNode
 }
 

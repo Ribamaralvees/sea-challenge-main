@@ -14,7 +14,7 @@ interface NavItem {
   label: string
   to: string
   Icon: (props: { className?: string }) => JSX.Element
-  
+
   isActive: (pathname: string) => boolean
 }
 
@@ -70,9 +70,12 @@ export function Sidebar() {
   return (
     <nav
       aria-label="Menu principal"
-      className="sticky top-0 flex h-screen w-14 shrink-0 flex-col items-center justify-center rounded-tr-2xl rounded-br-2xl bg-sidebar"
+      className="sticky top-0 flex h-screen w-14 shrink-0 flex-col items-center justify-center rounded-br-2xl rounded-tr-2xl bg-sidebar"
     >
-      <span aria-hidden="true" className="absolute left-0 top-[52px] h-10 w-full bg-surface" />
+      <span
+        aria-hidden="true"
+        className="absolute left-0 top-[52px] h-10 w-full bg-surface"
+      />
 
       <div className="flex flex-col items-center gap-4">
         {NAV_ITEMS.map(({ id, label, to, Icon, isActive }) => {

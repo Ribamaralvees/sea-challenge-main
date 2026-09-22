@@ -15,7 +15,14 @@ interface RadioGroupProps {
   error?: string
 }
 
-export function RadioGroup({ label, name, options, value, onChange, error }: RadioGroupProps) {
+export function RadioGroup({
+  label,
+  name,
+  options,
+  value,
+  onChange,
+  error,
+}: RadioGroupProps) {
   return (
     <FieldShell label={label} error={error}>
       <div className="flex h-11 items-center gap-6">

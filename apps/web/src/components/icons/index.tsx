@@ -65,7 +65,15 @@ export function BellDocIcon(props: IconProps) {
     >
       <path d="M9 17a3 3 0 0 0 6 0" />
       <path d="M6 17h12l-1.4-2A6 6 0 0 1 15 11V9a6 6 0 0 0-9-5" />
-      <rect x="3.5" y="12.5" width="6" height="7" rx="1" fill="currentColor" stroke="none" />
+      <rect
+        x="3.5"
+        y="12.5"
+        width="6"
+        height="7"
+        rx="1"
+        fill="currentColor"
+        stroke="none"
+      />
     </svg>
   )
 }

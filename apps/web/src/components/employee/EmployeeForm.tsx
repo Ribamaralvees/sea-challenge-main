@@ -1,21 +1,12 @@
 import { useMemo } from 'react'
-import {
-  Controller,
-  FormProvider,
-  useFieldArray,
-  useForm,
-} from 'react-hook-form'
+import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { employeeSchema, type EmployeeFormValues } from '@/schemas/employeeSchema'
 import type { Employee, NewEmployee } from '@/types'
 import { ROLE_OPTIONS, ACTIVITY_OPTIONS, EPI_OPTIONS } from '@/constants'
 import { maskCpf } from '@/utils/cpf'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
-import {
-  closeForm,
-  createEmployee,
-  updateEmployee,
-} from '@/store/slices/employeesSlice'
+import { closeForm, createEmployee, updateEmployee } from '@/store/slices/employeesSlice'
 import { selectEditingEmployee } from '@/store/selectors/employeesSelectors'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
@@ -78,10 +69,7 @@ export function EmployeeForm() {
   const editingEmployee = useAppSelector(selectEditingEmployee)
   const isEditing = Boolean(editingEmployee)
 
-  const defaultValues = useMemo(
-    () => buildDefaults(editingEmployee),
-    [editingEmployee],
-  )
+  const defaultValues = useMemo(() => buildDefaults(editingEmployee), [editingEmployee])
 
   const methods = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeSchema),

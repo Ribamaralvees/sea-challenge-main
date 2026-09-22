@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
-import { selectCurrentIndex, selectCurrentStep, selectSteps } from '@/store/selectors/stepsSelectors'
+import {
+  selectCurrentIndex,
+  selectCurrentStep,
+  selectSteps,
+} from '@/store/selectors/stepsSelectors'
 import { setStepCompleted } from '@/store/slices/stepsSlice'
 import { Button } from '@/components/ui/Button'
 

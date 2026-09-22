@@ -113,12 +113,7 @@ const employeesSlice = createSlice({
   },
 })
 
-export const {
-  openCreateForm,
-  openEditForm,
-  closeForm,
-  toggleActiveOnly,
-  clearFilters,
-} = employeesSlice.actions
+export const { openCreateForm, openEditForm, closeForm, toggleActiveOnly, clearFilters } =
+  employeesSlice.actions
 
 export default employeesSlice.reducer

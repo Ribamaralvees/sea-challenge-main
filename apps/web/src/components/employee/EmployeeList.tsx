@@ -41,9 +41,7 @@ export function EmployeeList() {
     <>
       <section className="overflow-hidden rounded-panel bg-surface shadow-card">
         <header className="bg-primary px-6 py-4">
-          <h1 className="text-2xl font-normal text-content-inverse">
-            Funcionário(s)
-          </h1>
+          <h1 className="text-2xl font-normal text-content-inverse">Funcionário(s)</h1>
         </header>
 
         <div className="flex flex-col gap-4 p-6">

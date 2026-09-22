@@ -17,6 +17,5 @@ export const selectCurrentStep = createSelector(
 
 export const selectHasProgress = createSelector(
   selectStepsState,
-  ({ items, currentIndex }) =>
-    currentIndex > 0 || items.some((step) => step.completed),
+  ({ items, currentIndex }) => currentIndex > 0 || items.some((step) => step.completed),
 )

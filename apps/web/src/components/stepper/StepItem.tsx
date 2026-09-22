@@ -4,7 +4,7 @@ import { BuildingIcon } from '@/components/icons'
 
 interface StepItemProps {
   label: string
-  
+
   position: number
   isCurrent: boolean
   isActive: boolean

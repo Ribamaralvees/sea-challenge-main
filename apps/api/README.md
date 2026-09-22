@@ -34,21 +34,21 @@ npm start           # executa o build (node dist/index.js)
 
 Configuração por variáveis de ambiente (veja `.env.example`):
 
-| Variável | Padrão | Descrição |
-|---|---|---|
+| Variável       | Padrão                                            | Descrição                       |
+| -------------- | ------------------------------------------------- | ------------------------------- |
 | `DATABASE_URL` | `postgres://sea:sea@localhost:5432/sea_challenge` | String de conexão do PostgreSQL |
-| `PORT` | `3001` | Porta da API |
+| `PORT`         | `3001`                                            | Porta da API                    |
 
 ## Endpoints
 
-| Método | Rota | Corpo | Resposta |
-|---|---|---|---|
-| GET | `/employees` | — | `Employee[]` |
-| POST | `/employees` | `Employee` sem `id` | `Employee` criado (201) |
-| PUT | `/employees/:id` | `Employee` | `Employee` atualizado |
-| DELETE | `/employees/:id` | — | `204 No Content` |
-| GET | `/steps` | — | `Step[]` |
-| PATCH | `/steps/:id` | `{ "completed": true }` | `Step` atualizado |
+| Método | Rota             | Corpo                   | Resposta                |
+| ------ | ---------------- | ----------------------- | ----------------------- |
+| GET    | `/employees`     | —                       | `Employee[]`            |
+| POST   | `/employees`     | `Employee` sem `id`     | `Employee` criado (201) |
+| PUT    | `/employees/:id` | `Employee`              | `Employee` atualizado   |
+| DELETE | `/employees/:id` | —                       | `204 No Content`        |
+| GET    | `/steps`         | —                       | `Step[]`                |
+| PATCH  | `/steps/:id`     | `{ "completed": true }` | `Step` atualizado       |
 
 Rotas inexistentes retornam `404`. Erros inesperados são tratados por um middleware central e retornam `500`.
 

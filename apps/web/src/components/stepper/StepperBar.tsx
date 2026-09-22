@@ -16,7 +16,7 @@ export function StepperBar() {
       aria-label="Etapas do processo"
       className="rounded-panel bg-surface px-6 py-6 shadow-card"
     >
-      <div className="flex items-start overflow-x-auto scroll-soft px-1 py-1">
+      <div className="scroll-soft flex items-start overflow-x-auto px-1 py-1">
         {steps.map((step, index) => (
           <div key={step.id} className="flex flex-1 items-start last:flex-none">
             <StepItem
@@ -27,7 +27,10 @@ export function StepperBar() {
               isCompleted={step.completed}
             />
             {index < steps.length - 1 && (
-              <span className="stepper-connector mt-[26px] min-w-[24px]" aria-hidden="true" />
+              <span
+                className="stepper-connector mt-[26px] min-w-[24px]"
+                aria-hidden="true"
+              />
             )}
           </div>
         ))}
