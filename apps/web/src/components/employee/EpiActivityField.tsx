@@ -27,7 +27,7 @@ export function EpiActivityField({
     name: `epiActivities.${activityIndex}.epis` as `epiActivities.${number}.epis`,
   })
 
-  const epiErrors = (errors as Record<string, any>).epiActivities?.[activityIndex]?.epis
+  const epiErrors = errors.epiActivities?.[activityIndex]?.epis
 
   return (
     <div className="flex flex-col gap-4 rounded-card border border-primary/45 p-4">
