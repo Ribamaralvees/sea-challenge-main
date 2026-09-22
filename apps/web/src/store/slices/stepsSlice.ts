@@ -60,6 +60,9 @@ const stepsSlice = createSlice({
         const index = state.items.findIndex((item) => item.id === action.payload.id)
         if (index !== -1) state.items[index] = action.payload
       })
+      .addCase(setStepCompleted.rejected, (state, action) => {
+        state.error = action.payload as string
+      })
   },
 })
 

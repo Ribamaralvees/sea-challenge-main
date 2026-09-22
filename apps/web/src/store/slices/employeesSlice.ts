@@ -101,14 +101,23 @@ const employeesSlice = createSlice({
         state.isFormOpen = false
         state.editingEmployee = null
       })
+      .addCase(createEmployee.rejected, (state, action) => {
+        state.error = action.payload as string
+      })
       .addCase(updateEmployee.fulfilled, (state, action) => {
         const index = state.items.findIndex((item) => item.id === action.payload.id)
         if (index !== -1) state.items[index] = action.payload
         state.isFormOpen = false
         state.editingEmployee = null
       })
+      .addCase(updateEmployee.rejected, (state, action) => {
+        state.error = action.payload as string
+      })
       .addCase(deleteEmployee.fulfilled, (state, action) => {
         state.items = state.items.filter((item) => item.id !== action.payload)
+      })
+      .addCase(deleteEmployee.rejected, (state, action) => {
+        state.error = action.payload as string
       })
   },
 })

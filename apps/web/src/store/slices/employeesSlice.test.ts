@@ -9,6 +9,7 @@ import reducer, {
   fetchEmployees,
   openEditForm,
   toggleActiveOnly,
+  updateEmployee,
 } from './employeesSlice'
 
 vi.mock('@/services/api', () => ({
@@ -88,6 +89,26 @@ describe('createEmployee', () => {
     expect(store.getState().employees.items[0]).toEqual(employee)
     expect(store.getState().employees.isFormOpen).toBe(false)
   })
+
+  it('preenche error em caso de falha', async () => {
+    vi.mocked(employeeService.create).mockRejectedValue(new Error('CPF inválido'))
+    const store = makeStore()
+    const { id: _id, ...payload } = employee
+    await store.dispatch(createEmployee(payload))
+    expect(store.getState().employees.error).toBe('CPF inválido')
+    expect(store.getState().employees.items).toHaveLength(0)
+  })
+})
+
+describe('updateEmployee', () => {
+  it('preenche error em caso de falha', async () => {
+    vi.mocked(employeeService.update).mockRejectedValue(
+      new Error('Funcionário não encontrado'),
+    )
+    const store = makeStore()
+    await store.dispatch(updateEmployee(employee))
+    expect(store.getState().employees.error).toBe('Funcionário não encontrado')
+  })
 })
 
 describe('deleteEmployee', () => {
@@ -98,5 +119,15 @@ describe('deleteEmployee', () => {
     await store.dispatch(fetchEmployees())
     await store.dispatch(deleteEmployee('a'))
     expect(store.getState().employees.items).toHaveLength(0)
+  })
+
+  it('preenche error em caso de falha e mantém a lista', async () => {
+    vi.mocked(employeeService.getAll).mockResolvedValue([employee])
+    vi.mocked(employeeService.remove).mockRejectedValue(new Error('Falha de rede'))
+    const store = makeStore()
+    await store.dispatch(fetchEmployees())
+    await store.dispatch(deleteEmployee('a'))
+    expect(store.getState().employees.error).toBe('Falha de rede')
+    expect(store.getState().employees.items).toHaveLength(1)
   })
 })
