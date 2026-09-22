@@ -5,6 +5,7 @@ node_modules
 dist
 dist-ssr
 coverage
+apps/api/src/generated
 
 # ambiente
 .env

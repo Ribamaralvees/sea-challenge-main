@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  masculino
+  feminino
+}
+
+model Employee {
+  id                String   @id @default(uuid()) @db.Uuid
+  name              String
+  cpf               String
+  rg                String
+  birthDate         String   @map("birth_date")
+  gender            Gender
+  role              String
+  active            Boolean  @default(true)
+  epiActivities     Json     @default("[]") @map("epi_activities")
+  healthCertificate String?  @map("health_certificate")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([cpf])
+  @@index([createdAt(sort: Desc)])
+  @@map("employees")
+}
+
+model Step {
+  id        String  @id
+  label     String
+  position  Int
+  completed Boolean @default(false)
+
+  @@map("steps")
+}

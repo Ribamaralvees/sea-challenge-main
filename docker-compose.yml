@@ -11,7 +11,7 @@ services:
       - '5432:5432'
     volumes:
       - sea_pgdata:/var/lib/postgresql/data
-      - ./apps/api/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      # linha do init.sql removida — o schema agora vem de prisma/migrations
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U sea -d sea_challenge']
       interval: 5s
