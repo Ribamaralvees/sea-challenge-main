@@ -12,6 +12,7 @@ import { selectCurrentStep } from '@/store/selectors/stepsSelectors'
 import { Button } from '@/components/ui/Button'
 import { Toggle } from '@/components/ui/Toggle'
 import { Modal } from '@/components/ui/Modal'
+import { useToast } from '@/components/toast/ToastProvider'
 import { FilterBar } from './FilterBar'
 import { EmployeeCard } from './EmployeeCard'
 
@@ -21,19 +22,29 @@ export function EmployeeList() {
   const employees = useAppSelector(selectVisibleEmployees)
   const currentStep = useAppSelector(selectCurrentStep)
   const [deletedOpen, setDeletedOpen] = useState(false)
+  const { showToast } = useToast()
 
   const handleDelete = async (employee: Employee) => {
     try {
       await dispatch(deleteEmployee(employee.id)).unwrap()
       setDeletedOpen(true)
-    } catch {
-      // Erro fica registrado no slice (state.employees.error).
+    } catch (error) {
+      showToast(
+        'error',
+        typeof error === 'string' ? error : 'Não foi possível excluir o funcionário.',
+      )
     }
   }
 
-  const handleStepCompleted = (completed: boolean) => {
-    if (currentStep) {
-      dispatch(setStepCompleted({ id: currentStep.id, completed }))
+  const handleStepCompleted = async (completed: boolean) => {
+    if (!currentStep) return
+    try {
+      await dispatch(setStepCompleted({ id: currentStep.id, completed })).unwrap()
+    } catch (error) {
+      showToast(
+        'error',
+        typeof error === 'string' ? error : 'Não foi possível atualizar a etapa.',
+      )
     }
   }
 

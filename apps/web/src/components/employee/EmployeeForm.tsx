@@ -8,6 +8,7 @@ import { maskCpf } from '@/utils/cpf'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { closeForm, createEmployee, updateEmployee } from '@/store/slices/employeesSlice'
 import { selectEditingEmployee } from '@/store/selectors/employeesSelectors'
+import { useToast } from '@/components/toast/ToastProvider'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { SelectField } from '@/components/ui/SelectField'
@@ -68,6 +69,7 @@ export function EmployeeForm() {
   const dispatch = useAppDispatch()
   const editingEmployee = useAppSelector(selectEditingEmployee)
   const isEditing = Boolean(editingEmployee)
+  const { showToast } = useToast()
 
   const defaultValues = useMemo(() => buildDefaults(editingEmployee), [editingEmployee])
 
@@ -87,7 +89,7 @@ export function EmployeeForm() {
   const activities = useFieldArray({ control, name: 'epiActivities' })
   const noEpi = watch('noEpi')
 
-  const onSubmit = (values: EmployeeFormValues) => {
+  const onSubmit = async (values: EmployeeFormValues) => {
     const payload: NewEmployee = {
       name: values.name,
       cpf: values.cpf,
@@ -100,10 +102,19 @@ export function EmployeeForm() {
       healthCertificate: values.noEpi ? null : values.healthCertificate,
     }
 
-    if (editingEmployee) {
-      dispatch(updateEmployee({ ...payload, id: editingEmployee.id }))
-    } else {
-      dispatch(createEmployee(payload))
+    try {
+      if (editingEmployee) {
+        await dispatch(updateEmployee({ ...payload, id: editingEmployee.id })).unwrap()
+        showToast('success', 'Funcionário atualizado com sucesso!')
+      } else {
+        await dispatch(createEmployee(payload)).unwrap()
+        showToast('success', 'Funcionário cadastrado com sucesso!')
+      }
+    } catch (error) {
+      showToast(
+        'error',
+        typeof error === 'string' ? error : 'Não foi possível salvar o funcionário.',
+      )
     }
   }
 

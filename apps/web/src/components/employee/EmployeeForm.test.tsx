@@ -7,6 +7,7 @@ import type { Employee } from '@/types'
 import { employeeService } from '@/services/api'
 import employeesReducer from '@/store/slices/employeesSlice'
 import stepsReducer from '@/store/slices/stepsSlice'
+import { ToastProvider } from '@/components/toast/ToastProvider'
 import { EmployeeForm } from './EmployeeForm'
 
 vi.mock('@/services/api', () => ({
@@ -33,7 +34,9 @@ const renderForm = () => {
   })
   render(
     <Provider store={store}>
-      <EmployeeForm />
+      <ToastProvider>
+        <EmployeeForm />
+      </ToastProvider>
     </Provider>,
   )
   return store
