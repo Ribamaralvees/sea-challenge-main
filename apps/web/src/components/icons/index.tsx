@@ -144,6 +144,39 @@ export function PaperclipIcon(props: IconProps) {
   )
 }
 
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <svg
+      {...base(props)}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="m8.5 12.5 2.5 2.5 4.5-5" />
+    </svg>
+  )
+}
+
+export function AlertCircleIcon(props: IconProps) {
+  return (
+    <svg
+      {...base(props)}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v5" />
+      <path d="M12 16h.01" />
+    </svg>
+  )
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <svg
