@@ -2,6 +2,18 @@
 
 API REST do desafio, em Node + Express + TypeScript, com persistência em **PostgreSQL** acessada via **Prisma** (client tipado, schema e migrations versionadas em `prisma/`). Payloads são validados com **Zod** (schemas compartilhados em `@sea/shared`).
 
+## Configuração
+
+`.env` não é versionado (contém config local). Antes de rodar migrations, seed ou a API, copie o template:
+
+```bash
+cp .env.example .env
+```
+
+> O runtime da API (`src/env.ts`) tem defaults e sobe mesmo sem `.env`. O
+> **Prisma CLI não tem** — `migrate`/`seed`/`studio` falham com
+> `Environment variable not found: DATABASE_URL` se o arquivo não existir.
+
 ## Banco de dados (Docker + Prisma)
 
 O banco roda em container. A partir da raiz do monorepo:

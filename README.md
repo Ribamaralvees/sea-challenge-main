@@ -21,12 +21,23 @@ sea-challenge/
 # 1. Instala as dependências de todos os workspaces
 npm install
 
-# 2. Sobe o banco PostgreSQL (cria schema e seed na primeira vez)
+# 2. Copia as variáveis de ambiente (o Prisma CLI precisa do .env pra achar
+#    a DATABASE_URL — sem esse passo, migrate/seed falham)
+cp apps/api/.env.example apps/api/.env
+
+# 3. Sobe o banco PostgreSQL
 npm run db:up
 
-# 3. Sobe API (porta 3001) e front-end (porta 5173) juntos
+# 4. Aplica as migrations e popula o banco com o seed
+npm run db:migrate -w @sea/api
+npm run db:seed -w @sea/api
+
+# 5. Sobe API (porta 3001) e front-end (porta 5173) juntos
 npm run dev
 ```
+
+> Os passos 3-4 são o que `npm run db:reset` faz de uma vez (mas também apaga o
+> volume do banco — use-o só para recomeçar do zero).
 
 Scripts úteis na raiz:
 
@@ -54,6 +65,7 @@ Destaques:
 - **Redux Toolkit** com `createAsyncThunk`, `createSlice` e selectors memoizados; camada de serviços (Axios) separada dos slices.
 - **React Hook Form + Zod** para o formulário, com `useFieldArray` aninhado nos EPIs e validação condicional por schema.
 - Stepper com etapas navegáveis por URL, estado de "concluído" persistido e feedback de ações (ex.: modal de exclusão).
+- Toasts de sucesso/erro para as ações de funcionário e etapa, e um `ErrorBoundary` no shell da aplicação para erros inesperados de render.
 
 Detalhe sobre estilo: o desafio recomendava Ant Design, mas optei por Tailwind para ter controle pixel-perfect. Documentação completa em `apps/web/README.md`.
 
@@ -78,7 +90,9 @@ A conexão usa a variável `DATABASE_URL` (veja `apps/api/.env.example`). Detalh
 
 ## O que evoluiria com mais tempo
 
-- Tratamento de erro mais granular na UI (toasts vindos da API)
+- CI (GitHub Actions) rodando lint/typecheck/test/build a cada push
+- Hardening da API (helmet, pino, rate-limit, `/health`, paginação)
+- Dockerfiles de `api`/`web` para um `docker compose up` completo (hoje só o banco roda em container)
 
 ---
 
