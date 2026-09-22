@@ -1,20 +1,26 @@
 # @sea/api — Back-end
 
-API REST do desafio, em Node + Express + TypeScript, com persistência em **PostgreSQL** (acessado via `pg`, com consultas parametrizadas e pool de conexões).
+API REST do desafio, em Node + Express + TypeScript, com persistência em **PostgreSQL** acessada via **Prisma** (client tipado, schema e migrations versionadas em `prisma/`). Payloads são validados com **Zod** (schemas compartilhados em `@sea/shared`).
 
-## Banco de dados (Docker)
+## Banco de dados (Docker + Prisma)
 
 O banco roda em container. A partir da raiz do monorepo:
 
 ```bash
 npm run db:up       # sobe o PostgreSQL (porta 5432)
-npm run db:reset    # recria do zero (apaga o volume e roda o seed)
+npm run db:reset    # recria o volume do zero + aplica migrations + roda o seed
 npm run db:down     # para o container
 ```
 
-Na primeira subida, o Docker executa `db/init.sql`, que cria as tabelas (`employees`, `steps`) e insere o seed (4 funcionários e 9 etapas).
+Ou, neste workspace, com o banco já no ar:
 
-> O `init.sql` só roda quando o volume está vazio. Se você alterar o schema/seed, rode `npm run db:reset` para aplicar.
+```bash
+npm run db:migrate  # aplica as migrations pendentes (prisma migrate dev)
+npm run db:seed     # popula com o seed (4 funcionários e 9 etapas)
+npm run db:studio   # abre o Prisma Studio para inspecionar os dados
+```
+
+> O schema fica em `prisma/schema.prisma`; toda alteração gera uma nova migration versionada em `prisma/migrations` (comitada no git). O client é gerado automaticamente no `postinstall`.
 
 ## Rodar a API
 
@@ -38,6 +44,9 @@ Configuração por variáveis de ambiente (veja `.env.example`):
 | -------------- | ------------------------------------------------- | ------------------------------- |
 | `DATABASE_URL` | `postgres://sea:sea@localhost:5432/sea_challenge` | String de conexão do PostgreSQL |
 | `PORT`         | `3001`                                            | Porta da API                    |
+| `CORS_ORIGIN`  | `http://localhost:5173`                           | Origem permitida pelo CORS      |
+
+As variáveis são validadas com Zod em `src/env.ts` — a API não sobe se algo estiver inválido.
 
 ## Endpoints
 
@@ -50,26 +59,34 @@ Configuração por variáveis de ambiente (veja `.env.example`):
 | GET    | `/steps`         | —                       | `Step[]`                |
 | PATCH  | `/steps/:id`     | `{ "completed": true }` | `Step` atualizado       |
 
-Rotas inexistentes retornam `404`. Erros inesperados são tratados por um middleware central e retornam `500`.
+Payloads inválidos retornam `400` com o detalhamento dos campos (via Zod). Rotas/ids inexistentes retornam `404`. Erros inesperados são tratados por um middleware central e retornam `500`.
 
 ## Estrutura
 
 ```
+prisma/
+├── schema.prisma                 # modelos + datasource
+├── migrations/                   # migrations versionadas (git)
+└── seed.ts                       # popula o banco (4 funcionários, 9 etapas)
+
 src/
-├── db/pool.ts                    # pool de conexões (pg)
-├── repositories/                 # acesso a dados (SQL parametrizado)
+├── app.ts                        # app Express (sem listen) — usado nos testes
+├── index.ts                      # bootstrap: listen + shutdown
+├── env.ts                        # variáveis de ambiente validadas com Zod
+├── errors.ts                     # AppError / NotFoundError / ValidationError
+├── db/prisma.ts                  # instância do PrismaClient
+├── middlewares/validate.ts       # middleware de validação de body com Zod
+├── repositories/                 # acesso a dados via Prisma
 │   ├── employeesRepository.ts
 │   └── stepsRepository.ts
 ├── routes/                       # rotas Express
 │   ├── employees.ts
 │   └── steps.ts
 ├── utils/asyncHandler.ts         # wrapper para handlers assíncronos
-├── types.ts
-└── index.ts                      # bootstrap do servidor
-
-db/init.sql                       # schema + seed (executado pelo Docker)
+├── types.ts                      # re-exporta os tipos de @sea/shared
+└── __tests__/                    # testes de rota (Vitest + supertest)
 ```
 
 ## Modelagem
 
-`employees` usa colunas tipadas e `epi_activities` como **JSONB** — os EPIs por atividade são sempre lidos/gravados junto do funcionário, então um documento JSONB é mais simples e direto que normalizar em tabelas extras. `steps` é uma tabela própria com ordenação por `position`.
+`employees` usa colunas tipadas e `epi_activities` como **JSON** — os EPIs por atividade são sempre lidos/gravados junto do funcionário, então um documento JSON é mais simples e direto que normalizar em tabelas extras. `steps` é uma tabela própria com ordenação por `position`.

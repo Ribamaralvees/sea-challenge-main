@@ -6,7 +6,7 @@ Monorepo do desafio técnico da SEA Tecnologia: uma interface de gerenciamento d
 sea-challenge/
 ├── apps/
 │   ├── web/   →  front-end React + TypeScript + Vite
-│   └── api/   →  back-end Node + Express + TypeScript + PostgreSQL (pg)
+│   └── api/   →  back-end Node + Express + TypeScript + PostgreSQL (Prisma)
 ├── docker-compose.yml   →  banco PostgreSQL
 └── package.json         →  workspaces npm + scripts de orquestração
 ```
@@ -30,15 +30,15 @@ npm run dev
 
 Scripts úteis na raiz:
 
-| Script             | O que faz                                                     |
-| ------------------ | ------------------------------------------------------------- |
-| `npm run db:up`    | Sobe o PostgreSQL em container (Docker)                       |
-| `npm run db:down`  | Para o container do banco                                     |
-| `npm run db:reset` | Recria o banco do zero (apaga o volume e roda o seed de novo) |
-| `npm run dev`      | Sobe API e web em paralelo                                    |
-| `npm run dev:web`  | Sobe apenas o front-end                                       |
-| `npm run dev:api`  | Sobe apenas a API                                             |
-| `npm run build`    | Builda API e web                                              |
+| Script             | O que faz                                  |
+| ------------------ | ------------------------------------------ |
+| `npm run db:up`    | Sobe o PostgreSQL em container (Docker)    |
+| `npm run db:down`  | Para o container do banco                  |
+| `npm run db:reset` | Recria o banco do zero (migrations + seed) |
+| `npm run dev`      | Sobe API e web em paralelo                 |
+| `npm run dev:web`  | Sobe apenas o front-end                    |
+| `npm run dev:api`  | Sobe apenas a API                          |
+| `npm run build`    | Builda API e web                           |
 
 O front consome `http://localhost:3001` por padrão (configurável via `VITE_API_URL` em `apps/web`).
 
@@ -61,12 +61,12 @@ Detalhe sobre estilo: o desafio recomendava Ant Design, mas optei por Tailwind p
 
 ## apps/api — Back-end
 
-Node + Express + TypeScript, com **PostgreSQL** acessado via `pg` (consultas parametrizadas, pool de conexões). O banco roda em Docker (`docker-compose.yml`) e é criado/populado automaticamente a partir de `apps/api/db/init.sql` na primeira subida.
+Node + Express + TypeScript, com **PostgreSQL** acessado via **Prisma** (client tipado, schema e migrations versionadas em `apps/api/prisma`). O banco roda em Docker (`docker-compose.yml`); o schema é aplicado com `npm run db:migrate -w @sea/api` e populado com `npm run db:seed -w @sea/api` (ou `npm run db:reset` na raiz, que faz os dois).
 
 | Método | Rota             | Descrição                                       |
 | ------ | ---------------- | ----------------------------------------------- |
 | GET    | `/employees`     | Lista os funcionários                           |
-| POST   | `/employees`     | Cria um funcionário (id gerado pelo banco)      |
+| POST   | `/employees`     | Cria um funcionário (payload validado com Zod)  |
 | PUT    | `/employees/:id` | Atualiza um funcionário                         |
 | DELETE | `/employees/:id` | Remove um funcionário                           |
 | GET    | `/steps`         | Lista as etapas                                 |
@@ -78,9 +78,6 @@ A conexão usa a variável `DATABASE_URL` (veja `apps/api/.env.example`). Detalh
 
 ## O que evoluiria com mais tempo
 
-- Testes (Vitest no front, supertest na API)
-- Validação de payload na API com Zod, compartilhando o schema entre web e api
-- Migrations versionadas (ex.: node-pg-migrate ou Drizzle) no lugar do `init.sql` único
 - Tratamento de erro mais granular na UI (toasts vindos da API)
 
 ---
