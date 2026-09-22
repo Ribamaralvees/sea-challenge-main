@@ -1,20 +1,23 @@
-import { pool } from '../db/pool'
+import { prisma } from '../db/prisma'
 import type { Step } from '../types'
 
+const SELECT = { id: true, label: true, completed: true } as const
+
 export async function listSteps(): Promise<Step[]> {
-  const { rows } = await pool.query<Step>(
-    'SELECT id, label, completed FROM steps ORDER BY position ASC',
-  )
-  return rows
+  return prisma.step.findMany({ select: SELECT, orderBy: { position: 'asc' } })
 }
 
 export async function setStepCompleted(
   id: string,
   completed: boolean,
 ): Promise<Step | null> {
-  const { rows } = await pool.query<Step>(
-    'UPDATE steps SET completed = $1 WHERE id = $2 RETURNING id, label, completed',
-    [completed, id],
-  )
-  return rows[0] ?? null
+  try {
+    return await prisma.step.update({
+      where: { id },
+      data: { completed },
+      select: SELECT,
+    })
+  } catch {
+    return null
+  }
 }
