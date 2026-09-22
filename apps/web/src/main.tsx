@@ -4,6 +4,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { store } from '@/store'
 import { App } from '@/App'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { ToastProvider } from '@/components/toast/ToastProvider'
 import '@/styles/globals.css'
 
 const container = document.getElementById('root')
@@ -13,7 +15,11 @@ createRoot(container).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <ToastProvider>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </ToastProvider>
       </BrowserRouter>
     </Provider>
   </StrictMode>,
