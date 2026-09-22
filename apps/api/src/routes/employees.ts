@@ -1,5 +1,8 @@
 import { Router } from 'express'
+import { newEmployeeSchema } from '@sea/shared'
 import { asyncHandler } from '../utils/asyncHandler'
+import { validateBody } from '../middlewares/validate'
+import { NotFoundError } from '../errors'
 import {
   createEmployee,
   deleteEmployee,
@@ -18,6 +21,7 @@ employeesRouter.get(
 
 employeesRouter.post(
   '/',
+  validateBody(newEmployeeSchema),
   asyncHandler(async (req, res) => {
     res.status(201).json(await createEmployee(req.body))
   }),
@@ -25,12 +29,10 @@ employeesRouter.post(
 
 employeesRouter.put(
   '/:id',
+  validateBody(newEmployeeSchema),
   asyncHandler(async (req, res) => {
     const updated = await updateEmployee(req.params.id, req.body)
-    if (!updated) {
-      res.status(404).json({ message: 'Funcionário não encontrado' })
-      return
-    }
+    if (!updated) throw new NotFoundError('Funcionário não encontrado')
     res.json(updated)
   }),
 )
@@ -39,10 +41,7 @@ employeesRouter.delete(
   '/:id',
   asyncHandler(async (req, res) => {
     const removed = await deleteEmployee(req.params.id)
-    if (!removed) {
-      res.status(404).json({ message: 'Funcionário não encontrado' })
-      return
-    }
+    if (!removed) throw new NotFoundError('Funcionário não encontrado')
     res.status(204).send()
   }),
 )

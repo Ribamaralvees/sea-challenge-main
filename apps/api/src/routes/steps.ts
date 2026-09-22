@@ -1,5 +1,8 @@
 import { Router } from 'express'
+import { updateStepSchema } from '@sea/shared'
 import { asyncHandler } from '../utils/asyncHandler'
+import { validateBody } from '../middlewares/validate'
+import { NotFoundError } from '../errors'
 import { listSteps, setStepCompleted } from '../repositories/stepsRepository'
 
 export const stepsRouter = Router()
@@ -13,12 +16,10 @@ stepsRouter.get(
 
 stepsRouter.patch(
   '/:id',
+  validateBody(updateStepSchema),
   asyncHandler(async (req, res) => {
-    const updated = await setStepCompleted(req.params.id, Boolean(req.body.completed))
-    if (!updated) {
-      res.status(404).json({ message: 'Etapa não encontrada' })
-      return
-    }
+    const updated = await setStepCompleted(req.params.id, req.body.completed)
+    if (!updated) throw new NotFoundError('Etapa não encontrada')
     res.json(updated)
   }),
 )

@@ -1,6 +1,4 @@
 import { Pool } from 'pg'
+import { env } from '../env'
 
-const connectionString =
-  process.env.DATABASE_URL ?? 'postgres://sea:sea@localhost:5432/sea_challenge'
-
-export const pool = new Pool({ connectionString })
+export const pool = new Pool({ connectionString: env.DATABASE_URL })
